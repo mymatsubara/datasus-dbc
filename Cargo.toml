@@ -1,11 +1,17 @@
 [package]
 name = "datasus-dbc"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
+
 description = "Decompress DATASUS's *.dbc files into *.dbf files."
 license = "MIT"
+repository = "https://github.com/mymatsubara/datasus-dbc"
+authors = ["Murilo Matsubara <murilo.matsubara@gmail.com>"]
+documentation = "https://docs.rs/datasus-dbc"
+readme = "README.md"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+keywords = ["dbc", "datasus", "blast", "pkware", "dcl"]
+categories = ["compression", "enconding", ]
 
 [dependencies]
 explode = "0.1.2"
