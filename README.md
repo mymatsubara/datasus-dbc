@@ -1,5 +1,9 @@
 # datasus-dbc
 
+[![crates.io](https://img.shields.io/crates/v/datasus-dbc.svg)](https://crates.io/crates/datasus-dbc)
+[![docs.rs](https://docs.rs/datasus-dbc/badge.svg)](https://docs.rs/datasus-dbc)
+
+
 Decompress `*.dbc` files usually found in Brazil's DATASUS [ftp server](ftp://ftp.datasus.gov.br/dissemin/publicos) into `*.dbf` files.
 
 The underlying decompression algorithm used in `*.dbc` files is the *implode* algorithm from the PKWARE Data Compression Library. This library uses *Aaron Griffith*'s [rust implementation](https://crates.io/crates/explode) of the *implode* algorithm. Also, this library is heavily inspired by *Daniela Petruzalek*'s [pysus](https://github.com/danicat/pysus). I want to thank both of them, without their work this library would not be possible.
