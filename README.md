@@ -7,14 +7,14 @@ The underlying decompression algorithm used in `*.dbc` files is the *implode* al
 # Examples
 
 To decompress a `*.dbc` file into a `*.dbf` use `decompress`:
-```no_run
+```rust
 datasus_dbc::decompress("input.dbc", "output.dbf");
 ```
 
 ---
 
 If you want more control over how the `*.dbc` file is read, you can pass a [`File`](https://doc.rust-lang.org/std/io/struct.File.html) or other type which implements [`Read`](https://doc.rust-lang.org/std/io/trait.Read.html) to [`into_dbf_reader`](fn.into_dbf_reader.html) to get a reader of the decompressed content. 
-```no_run
+```rust
 use std::io::Read;
 
 let dbc_file = std::fs::File::open("input.dbc").unwrap();
