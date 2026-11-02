@@ -3,6 +3,7 @@ use explode::ExplodeReader;
 use std::fs::File;
 use std::fs::OpenOptions;
 use std::io;
+use std::io::BufReader;
 use std::io::Chain;
 use std::io::Cursor;
 use std::io::Read;
@@ -15,9 +16,13 @@ pub fn decompress<P>(dbc_path: P, dbf_path: P) -> Result<()>
 where
     P: AsRef<Path>,
 {
-    let dbc_file = File::open(dbc_path)?;
+    let dbc_file = BufReader::new(File::open(dbc_path)?);
     let mut dbf_reader = into_dbf_reader(dbc_file)?;
-    let mut dbf_file = OpenOptions::new().write(true).create(true).open(dbf_path)?;
+    let mut dbf_file = OpenOptions::new()
+        .write(true)
+        .create(true)
+        .truncate(true)
+        .open(dbf_path)?;
     io::copy(&mut dbf_reader, &mut dbf_file)?;
 
     Ok(())
@@ -64,9 +69,9 @@ mod tests {
 
     #[test]
     fn test_decompress() -> Result<()> {
-        let input = r"test\data\sids.dbc";
-        let output = r"test\data\sids.dbf";
-        let expected = r"test\data\expected-sids.dbf";
+        let input = "test/data/sids.dbc";
+        let output = "test/data/sids.dbf";
+        let expected = "test/data/expected-sids.dbf";
 
         decompress(input, output)?;
 
@@ -77,6 +82,28 @@ mod tests {
         assert_eq!(
             output_file, expected_file,
             "Decompressed .dbf is not equal to expected result"
+        );
+
+        Ok(())
+    }
+
+    #[test]
+    fn test_decompress_overwrites_larger_file() -> Result<()> {
+        let input = "test/data/sids.dbc";
+        let output = "test/data/sids-overwrite.dbf";
+        let expected = "test/data/expected-sids.dbf";
+
+        let expected_file = fs::read(expected)?;
+        fs::write(output, vec![0xAA; expected_file.len() * 2])?;
+
+        decompress(input, output)?;
+
+        let output_file = fs::read(output)?;
+        fs::remove_file(output)?;
+
+        assert_eq!(
+            output_file, expected_file,
+            "Decompressed .dbf kept bytes from the file it overwrote"
         );
 
         Ok(())
